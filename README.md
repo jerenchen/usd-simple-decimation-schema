@@ -1,0 +1,1 @@
+# A Simple USD Schema for Mesh Decimation

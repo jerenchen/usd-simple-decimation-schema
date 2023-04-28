@@ -1,0 +1,25 @@
+#usda 1.0
+(
+    subLayers = [
+        @usdGeom/schema.usda@
+    ]
+)
+
+def "GLOBAL" (
+    customData = {
+        string libraryName       = "trimesh"
+        string libraryPath       = "./"
+        string libraryPrefix     = "Usd"
+        bool skipCodeGeneration  = true
+    }
+) {}
+
+class TriMesh "TriMesh" (
+    doc = "Extended mesh to support triangle mesh decimation"
+    inherits = </Mesh>
+)
+{
+    uniform int maxTriangles = 5000
+    int[] triangleIndices (doc = "Topology of the decimated trianglar mesh")
+    int[] srcPointIndices (doc = "Decimated point indices into source mesh")
+}
