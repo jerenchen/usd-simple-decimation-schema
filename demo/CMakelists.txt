@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.1)
+
+project(simple-decimate)
+
+if(NOT EXISTS maneki_anim.usd)
+set(USD_URL https://www.dropbox.com/s/546gahzmbj98tv1/maneki_anim.usd?dl=1)
+file(
+  DOWNLOAD ${USD_URL} ../maneki_anim.usd
+  TIMEOUT 60
+)
+endif()

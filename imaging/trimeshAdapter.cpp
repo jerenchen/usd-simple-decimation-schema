@@ -3,7 +3,6 @@
 #include <pxr/imaging/hd/meshUtil.h>
 
 #include <igl/qslim.h>
-#include <igl/remove_unreferenced.h>
 
 #include <algorithm>
 
@@ -35,20 +34,17 @@ public:
     attr.GetBracketingTimeSamples(time.GetValue(), &lower, &upper, &hasTime);
     if (!hasTime)
     {
-      Eigen::MatrixXi F;
-      Eigen::VectorXi I;
-      {
-        // Triangulation
-        HdMeshUtil meshUtil(&topo, prim.GetPath());
-        VtVec3iArray triangleIndices;
-        VtIntArray primitiveParams;
-        meshUtil.ComputeTriangleIndices(&triangleIndices, &primitiveParams);
+      VtVec3iArray srcTriIndices;
+      VtIntArray primitiveParams;
+      HdMeshUtil meshUtil(&topo, prim.GetPath());
+      meshUtil.ComputeTriangleIndices(&srcTriIndices, &primitiveParams);
 
-        // Decimation via libigl/qslim 
+      VtIntArray lowTriIndices, srcPntIndices;
+      {
+        Eigen::MatrixXi F(srcTriIndices.size(), 3);
         size_t i = 0;
-        F.resize(triangleIndices.size(), 3);
-        for (const auto& Ti : triangleIndices)
-          F.row(i++) << Ti[0], Ti[1], Ti[2];
+        for (const auto& T_i : srcTriIndices)
+          F.row(i++) << T_i[0], T_i[1], T_i[2];
 
         const auto points = _Get<VtVec3fArray>(prim, UsdGeomTokens->points, time);
         Eigen::MatrixXd V(points.size(), 3);
@@ -56,30 +52,27 @@ public:
         for (const auto& p : points)
           V.row(i++) << double(p[0]), double(p[1]), double(p[2]);
 
+        // QSlim mesh decimation
         const auto max_m = _Get<int>(prim, TriMeshTokens->maxTriangles, time);
-        Eigen::VectorXi J;
+        Eigen::VectorXi I, J;
         igl::qslim(V, F, max_m, V, F, J, I);
+
+        const Eigen::MatrixXi& F_t = F.transpose();
+        lowTriIndices = VtIntArray(F_t.data(), F_t.data() + F_t.size());
+        srcPntIndices = VtIntArray(I.data(), I.data() + I.size());
       }
 
-      VtIntArray triFaceIndices(F.rows() * 3);
-      size_t idx = 0;
-      for (size_t i = 0; i < F.rows(); ++i)
-        for (size_t j = 0; j < 3; ++j)
-          triFaceIndices[idx++] = F(i, j);
-      attr.Set(triFaceIndices, time);
-
-      prim.GetAttribute(
-        TriMeshTokens->srcPointIndices
-      ).Set(VtIntArray(I.data(), I.data() + I.size()), time);
+      attr.Set(lowTriIndices, time);
+      prim.GetAttribute(TriMeshTokens->srcPointIndices).Set(srcPntIndices, time);
     }
 
-    const auto& triFaceIndices = _Get<VtIntArray>(prim, TriMeshTokens->triangleIndices, time);
+    const auto& triIndices = _Get<VtIntArray>(prim, TriMeshTokens->triangleIndices, time);
 
     HdMeshTopology meshTopo(
       topo.GetScheme(),
       topo.GetOrientation(),
-      VtIntArray(triFaceIndices.size()/3, 3),
-      triFaceIndices,
+      VtIntArray(triIndices.size()/3, 3),
+      triIndices,
       topo.GetHoleIndices()
     );
 

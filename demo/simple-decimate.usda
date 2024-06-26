@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    startTimeCode = 1
+    endTimeCode = 24
+)
+
+def "manekineko" (
+    prepend references = @./maneki_anim.usd@
+)
+{
+    # Override 'Mesh' prim type to 'TriMesh'
+    over TriMesh "body"
+    {
+        int maxTriangles = 2500
+    }
+
+    # Override transform to remove the animation
+    matrix4d xformOp:transform:transform.timeSamples = {
+        1:((1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1))
+    }
+}
