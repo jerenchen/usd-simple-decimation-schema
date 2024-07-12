@@ -28,6 +28,8 @@ public:
     auto topology = UsdImagingMeshAdapter::GetTopology(prim, cachePath, time);
     const auto& topo = topology.Get<HdMeshTopology>();
 
+    // Compute & store the triangulated/decmiated topology if the time sample does not exist yet
+
     auto attr = prim.GetAttribute(TriMeshTokens->triangleIndices);
     bool hasTime = false;
     double lower, upper;
@@ -66,6 +68,8 @@ public:
       prim.GetAttribute(TriMeshTokens->srcPointIndices).Set(srcPntIndices, time);
     }
 
+    // Return the pre-computed triangulated/decmiated topology time sample
+
     const auto& triIndices = _Get<VtIntArray>(prim, TriMeshTokens->triangleIndices, time);
 
     HdMeshTopology meshTopo(
@@ -87,8 +91,9 @@ public:
   { 
     auto points = _Get<VtVec3fArray>(prim, UsdGeomTokens->points, time);
 
+    // Index into points of the original mesh using the erase-remove idiom for decimated points
+
     const auto& indices = _Get<VtIntArray>(prim, TriMeshTokens->srcPointIndices, time);
-    // Indexing into source points of the original mesh using the erase-remove idiom
     auto it = indices.begin();
     const GfVec3f* p0 = &points[0];
     points.erase(

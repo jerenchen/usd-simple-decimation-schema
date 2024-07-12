@@ -5,20 +5,21 @@ An example USD schema/adapter implementing a simple triangular mesh decimation u
 
 Example "Maneki" animation USD asset made available by [J CUBE](https://j-cube.jp/solutions/multiverse/assets/)
 
-## Prerequisite:
+## Prerequisite
 * [Pixar OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD)
+* CMake
 
-## Building the plug-ins
+## Build
 ```shell
 git clone https://github.com/jerenchen/usd-simple-decimation-schema.git
 cd usd-simple-decimation-schema
 mkdir build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/usd/plugins -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_INSTALL_PREFIX=</path/to/usd/plugins> -DCMAKE_BUILD_TYPE=Release ..
 make -j8 && make install
 ```
-The content of `/path/to/usd/plugins` should look like this:
+The content of `</path/to/usd/plugins>` should look like this:
 ```shell
-.
+</path/to/usd/plugins>
 └── plugin
     ├── plugInfo.json
     ├── trimesh
@@ -30,9 +31,9 @@ The content of `/path/to/usd/plugins` should look like this:
     │       └── plugInfo.json
     └── trimeshImaging.dylib
 ```
-Finally, add `/path/to/usd/plugins` to env var `PXR_PLUGINPATH_NAME`.
+Finally, make sure path `</path/to/usd/plugins>` is added to the env var `PXR_PLUGINPATH_NAME` for plug-in discovery.
 
-## Viewing the Demo
+## Demo
 Before opening the demo, either download the example USD asset from [here](https://j-cube.jp/solutions/multiverse/assets/) or via CMake:
 ```shell
 cd usd-simple-decimation-schema/demo
@@ -42,3 +43,6 @@ With both `simple-deciamte.usda` and `maneki_anim.usd` present in the same direc
 ```shell
 usdview simple-decimate.usda
 ```
+
+## Resources
+* [USD-Cookbook: Custom schema with Python binding](https://github.com/ColinKennedy/USD-Cookbook/tree/master/plugins/custom_schemas_with_python_bindings)
