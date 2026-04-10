@@ -1,0 +1,9 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+demo/*
+!demo/simple-decimate.usda
+
+build
+plugin

@@ -1,48 +1,35 @@
 # usd-simple-decimation-schema
-An example USD schema/adapter implementing a simple triangular mesh decimation using [libigl](https://github.com/libigl/libigl).
+An example [OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD) API schema with Hydra 2.0 implementation of a simple mesh decimation USD plugin using [libigl](https://github.com/libigl/libigl).
 
 ![demo](demo/decimate.gif)
 
-Example "Maneki" animation USD asset made available by [J CUBE](https://j-cube.jp/solutions/multiverse/assets/)
+>> ACKNOWLEDGMENT: The "horse gallop" animation is converted from the example of the *.obj sequence made available by ["Mesh Data from Deformation Transfer for Triangle Meshes"](https://people.csail.mit.edu/sumner/research/deftransfer/data.html).
+
+## News
+* 2026-04-10: Hydra 2.0 reimplementation with Pixi env manager
+* 2024-06-20: Initial implementation using USD Imaging scene delegate (Hydra 1.0/Legacy)
 
 ## Prerequisite
-* [Pixar OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD)
-* CMake
+* [Pixi](https://pixi.prefix.dev/) for building the plugin & running the demo
 
 ## Build
+>> NOTE: This project is set up for *MacOS*; support for *Linux* may be added in the future
+
 ```shell
 git clone https://github.com/jerenchen/usd-simple-decimation-schema.git
 cd usd-simple-decimation-schema
-mkdir build && cd build
-cmake -DCMAKE_INSTALL_PREFIX=</path/to/usd/plugins> -DCMAKE_BUILD_TYPE=Release ..
-make -j8 && make install
+pixi run build-plugin
 ```
-The content of `</path/to/usd/plugins>` should look like this:
-```shell
-</path/to/usd/plugins>
-└── plugin
-    ├── plugInfo.json
-    ├── trimesh
-    │   └── resources
-    │       ├── generatedSchema.usda
-    │       └── plugInfo.json
-    ├── trimeshImaging
-    │   └── resources
-    │       └── plugInfo.json
-    └── trimeshImaging.dylib
-```
-Finally, make sure path `</path/to/usd/plugins>` is added to the env var `PXR_PLUGINPATH_NAME` for plug-in discovery.
 
 ## Demo
-Before opening the demo, either download the example USD asset from [here](https://j-cube.jp/solutions/multiverse/assets/) or via CMake:
+To download and convert the horse gallop animation into a USD scene, run:
 ```shell
-cd usd-simple-decimation-schema/demo
-mkdir build_demo && cd build_demo && cmake .. && cd ..
+pixi run build-demo
 ```
-With both `simple-deciamte.usda` and `maneki_anim.usd` present in the same directory, run the following command to view the demo:
+Once done, run the following command to view the demo:
 ```shell
-usdview simple-decimate.usda
+pixi run view-demo
 ```
 
-## Resources
-* [USD-Cookbook: Custom schema with Python binding](https://github.com/ColinKennedy/USD-Cookbook/tree/master/plugins/custom_schemas_with_python_bindings)
+## More...
+* Only the "codeless" schema is generated for this example but full Python support for the API schema can be implemented by following the steps described in [USD-Cookbook: Custom schema with Python binding](https://github.com/ColinKennedy/USD-Cookbook/tree/master/plugins/custom_schemas_with_python_bindings)

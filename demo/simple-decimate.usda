@@ -1,21 +1,19 @@
 #usda 1.0
 (
     startTimeCode = 1
-    endTimeCode = 24
+    endTimeCode = 48
 )
 
-def "manekineko" (
-    prepend references = @./maneki_anim.usd@
+def "horse" (
+    prepend references = @./horse-gallop.usd@
 )
 {
-    # Override 'Mesh' prim type to 'TriMesh'
-    over TriMesh "body"
+    # Override 'Mesh' with SimpleDecimateAPI
+    over "defaultobject" (
+        prepend apiSchemas = ["SimpleDecimateAPI"]
+    )
     {
-        int maxTriangles = 2500
-    }
-
-    # Override transform to remove the animation
-    matrix4d xformOp:transform:transform.timeSamples = {
-        1:((1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1))
+        int simpleDecimate:maxTriangles = 2500
+        bool simpleDecimate:blockIntersections = true
     }
 }

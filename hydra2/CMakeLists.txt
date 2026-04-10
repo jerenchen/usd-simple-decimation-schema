@@ -1,8 +1,9 @@
-set(USD_PLUGIN_NAME trimeshImaging)
+set(USD_PLUGIN_NAME simpleDecimateHydra2)
 
 add_library(
     ${USD_PLUGIN_NAME} SHARED
-        trimeshAdapter.cpp
+        simpleDecimateFilter.cpp
+        simpleDecimateAdapter.cpp
 )
 
 target_include_directories(

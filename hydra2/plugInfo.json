@@ -1,0 +1,31 @@
+{
+    "Plugins": [
+        {
+            "Info": {
+                "Types": {
+                    "SimpleDecimateSceneIndexPlugin": {
+                        "bases": ["HdSceneIndexPlugin"],
+                        "loadWithRenderer": "GL",
+                        "displayName": "Simple Decimation Filter",
+                        "priority": 100,
+                        "sceneIndexType": "Filtering",
+                        "sceneIndexDeclaration": [
+                            {
+                                "rendererDisplayName": "GL"
+                            }
+                        ]
+                    },
+                    "SimpleDecimateAdapter" : {
+                        "bases": ["UsdImagingAPISchemaAdapter"],
+                        "apiSchemaName": "SimpleDecimateAPI"
+                    }
+                }
+            },
+            "LibraryPath": "@PLUG_INFO_LIBRARY_PATH@", 
+            "Name": "simpleDecimateHydra2", 
+            "ResourcePath": "@PLUG_INFO_RESOURCE_PATH@", 
+            "Root": "@PLUG_INFO_ROOT@", 
+            "Type": "library"
+        }
+    ]
+}

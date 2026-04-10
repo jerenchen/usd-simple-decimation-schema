@@ -1,0 +1,37 @@
+[workspace]
+authors = ["Jeren C."]
+channels = ["conda-forge"]
+name = "usd-simple-decimation-schema"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[environments]
+debug = ["debug"]
+
+[tasks]
+gen-schema = "cd schemas && usdGenSchema schema.usda"
+build-plugin = """
+    rm -rf plugin && rm -rf build && mkdir build && cd build && 
+    cmake -DCMAKE_INSTALL_PREFIX=../ -DCMAKE_BUILD_TYPE=Release .. && 
+    make -j8 && make install
+"""
+build-demo = "python python/download-sample.py"
+view-demo = "usdview demo/simple-decimate.usda"
+[feature.debug.tasks]
+check-plugin = "python python/check-plugin.py"
+
+[activation.env]
+PXR_PLUGINPATH_NAME = "$PWD/plugin:$PXR_PLUGINPATH_NAME"
+[feature.debug.activation.env]
+TF_DEBUG = "PLUG_REGISTRATION"
+
+[dependencies]
+python = ">=3.10,<3.11"
+pyassimp = ">=5.2.5,<6"
+numpy = ">=2.2.6,<3"
+jinja2 = ">=3.1.6,<4"
+pyside6 = ">=6.11.0,<7"
+openusd = "26.3.*"
+
+[pypi-dependencies]
+requests = ">=2.33.0, <3"

@@ -4,6 +4,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 project(usd-simple-decimate-schema)
 
 find_package(pxr REQUIRED)
+find_package(OpenGL REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -12,12 +13,12 @@ include(FetchContent)
 FetchContent_Declare(
     libigl
     GIT_REPOSITORY https://github.com/libigl/libigl.git
-    GIT_TAG v2.5.0
+    GIT_TAG v2.6.0
     EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(libigl)
 
-add_subdirectory(schemas)
-add_subdirectory(imaging)
+add_subdirectory(schema)
+add_subdirectory(hydra2)
 
 install(FILES plugInfo.json DESTINATION plugin)

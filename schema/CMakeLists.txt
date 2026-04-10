@@ -1,4 +1,4 @@
-set(USD_PLUGIN_NAME trimesh)
+set(USD_PLUGIN_NAME simpleDecimateSchema)
 
 set(PLUG_INFO_ROOT "..")
 set(PLUG_INFO_LIBRARY_PATH "../${USD_PLUGIN_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}")

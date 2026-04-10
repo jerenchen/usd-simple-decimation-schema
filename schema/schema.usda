@@ -1,0 +1,23 @@
+#usda 1.0
+(
+    subLayers = [
+        @usd/schema.usda@
+    ]
+)
+
+over "GLOBAL" (
+    customData = {
+        string libraryName       = "simpleDecimateSchema"
+        string libraryPath       = "./"
+        string libraryPrefix     = "Usd"
+        bool skipCodeGeneration  = true
+    }
+) {}
+
+class "SimpleDecimateAPI" (
+    inherits = </APISchemaBase>
+    customData = {token apiSchemaType = "singleApply"}
+) {
+    bool simpleDecimate:blockIntersections = true
+    int simpleDecimate:maxTriangles = 5000
+}
